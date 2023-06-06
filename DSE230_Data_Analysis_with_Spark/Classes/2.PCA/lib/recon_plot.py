@@ -53,14 +53,18 @@ class recon_plot:
         widge_dict={}
         widge_list=[]
         for i in range(self.eigen_decomp.n):
-            if coeff[i]>0:
-                r=[0,coeff[i]*2]
-            else:
-                r=[coeff[i]*2,0]
-
-            widge_list.append(widgets.FloatSlider(min=r[0],max=r[1],step=(r[1]-r[0])/10.,\
-                                                  value=coeff[i],orientation='vertical',decription='v'+str(i)))
-            widge_dict['c'+str(i)]=widge_list[-1]
+            r = [0,coeff[i]*2] if coeff[i]>0 else [coeff[i]*2,0]
+            widge_list.append(
+                widgets.FloatSlider(
+                    min=r[0],
+                    max=r[1],
+                    step=(r[1] - r[0]) / 10.0,
+                    value=coeff[i],
+                    orientation='vertical',
+                    decription=f'v{str(i)}',
+                )
+            )
+            widge_dict[f'c{str(i)}'] = widge_list[-1]
 
         return widge_list,widge_dict
 
@@ -80,7 +84,7 @@ class recon_plot:
         #print self.i,coeff
         #self.i+=1
         #return None
-        
+
         if self.interactive or self.fig is None:
             #print  'setting axis in plot_combination'
             self.fig=plt.figure(figsize=self.figsize)
@@ -90,11 +94,11 @@ class recon_plot:
         self.plot(A,label='mean')
 
         for i in range(self.eigen_decomp.n):
-            g=self.eigen_decomp.v[i]*coeff['c'+str(i)]
+            g = self.eigen_decomp.v[i] * coeff[f'c{str(i)}']
             A=A+g
-            self.plot(A,label='c'+str(i))
+            self.plot(A, label=f'c{str(i)}')
         self.plot(self.eigen_decomp.f,label='target')
-        self.ax.grid(figure=self.fig)        
+        self.ax.grid(figure=self.fig)
         self.ax.legend()
         self.ax.set_title(self.Title)
         if self.interactive:

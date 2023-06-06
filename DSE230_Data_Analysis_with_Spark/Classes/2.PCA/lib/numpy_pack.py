@@ -18,7 +18,9 @@ def packArray(a):
 
     """
     if type(a)!=np.ndarray:
-        raise Exception("input to packArray should be numpy.ndarray. It is instead "+str(type(a)))
+        raise Exception(
+            f"input to packArray should be numpy.ndarray. It is instead {str(type(a))}"
+        )
     return bytearray(a.tobytes())
 
 

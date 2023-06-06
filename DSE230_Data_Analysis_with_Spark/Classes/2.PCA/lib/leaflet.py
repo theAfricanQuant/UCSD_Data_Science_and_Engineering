@@ -25,8 +25,7 @@ class InteractMixin(object):
                 widget.description = name
             widget.link = link((widget, 'value'), (self, name))
             c.append(widget)
-        cont = Box(children=c)
-        return cont
+        return Box(children=c)
 
 
 class Layer(Widget, InteractMixin):
@@ -40,7 +39,7 @@ class Layer(Widget, InteractMixin):
 
     @default('options')
     def _default_options(self):
-        return [name for name in self.traits(o=True)]
+        return list(self.traits(o=True))
 
     _map = None
 
@@ -48,22 +47,21 @@ class Layer(Widget, InteractMixin):
 
     @observe('visible')
     def _update_visible(self, change):
-        was_visible = change['old']
-        will_visible = change['new']
         if self._map is None:
             # If Map.add_layer has never been called raise
             raise LayerException('Map.add_layer() must be called first')
-        else:
-            # Map.add_layer() was called
-            if (not was_visible) and will_visible:
-                # Only add if we aren't already in self._map.layers
-                if self.model_id not in self._map.layer_ids:
-                    self._map.add_layer(self)
-            # Map.remove_layer() was called
-            elif was_visible and (not will_visible):
-                # Only remove if we are in self._map.layers
-                if self.model_id in self._map.layer_ids:
-                    self._map.remove_layer(self)
+        was_visible = change['old']
+        will_visible = change['new']
+        # Map.add_layer() was called
+        if (not was_visible) and will_visible:
+            # Only add if we aren't already in self._map.layers
+            if self.model_id not in self._map.layer_ids:
+                self._map.add_layer(self)
+        # Map.remove_layer() was called
+        elif was_visible and (not will_visible):
+            # Only remove if we are in self._map.layers
+            if self.model_id in self._map.layer_ids:
+                self._map.remove_layer(self)
 
 
 class UILayer(Layer):
@@ -272,7 +270,7 @@ class Control(Widget):
 
     @default('options')
     def _default_options(self):
-        return [name for name in self.traits(o=True)]
+        return list(self.traits(o=True))
 
     _map = None
 
@@ -280,22 +278,21 @@ class Control(Widget):
 
     @observe('visible')
     def _update_visible(self, change):
-        was_visible = change['old']
-        will_visible = change['new']
         if self._map is None:
             # If Map.add_control has never been called raise
             raise ControlException('Map.add_control() must be called first')
-        else:
-            # Map.add_control() was called
-            if (not was_visible) and will_visible:
-                # Only add if we aren't already in self._map.controls
-                if self.model_id not in self._map.control_ids:
-                    self._map.add_control(self)
-            # Map.remove_controls() was called
-            elif was_visible and (not will_visible):
-                # Only remove if we are in self._map.controls
-                if self.model_id in self._map.control_ids:
-                    self._map.remove_control(self)
+        was_visible = change['old']
+        will_visible = change['new']
+        # Map.add_control() was called
+        if (not was_visible) and will_visible:
+            # Only add if we aren't already in self._map.controls
+            if self.model_id not in self._map.control_ids:
+                self._map.add_control(self)
+        # Map.remove_controls() was called
+        elif was_visible and (not will_visible):
+            # Only remove if we are in self._map.controls
+            if self.model_id in self._map.control_ids:
+                self._map.remove_control(self)
 
 
 class DrawControl(Control):
@@ -394,7 +391,7 @@ class Map(DOMWidget, InteractMixin):
 
     @default('options')
     def _default_options(self):
-        return [name for name in self.traits(o=True)]
+        return list(self.traits(o=True))
 
     _south = Float(def_loc[0]).tag(sync=True)
     _north = Float(def_loc[0]).tag(sync=True)
@@ -467,13 +464,13 @@ class Map(DOMWidget, InteractMixin):
         if layer.model_id in self.layer_ids:
             raise LayerException('layer already on map: %r' % layer)
         layer._map = self
-        self.layers = tuple([l for l in self.layers] + [layer])
+        self.layers = tuple(list(self.layers) + [layer])
         layer.visible = True
 
     def remove_layer(self, layer):
         if layer.model_id not in self.layer_ids:
             raise LayerException('layer not on map: %r' % layer)
-        self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
+        self.layers = tuple(l for l in self.layers if l.model_id != layer.model_id)
         layer.visible = False
 
     def clear_layers(self):
@@ -498,13 +495,15 @@ class Map(DOMWidget, InteractMixin):
         if control.model_id in self.control_ids:
             raise ControlException('control already on map: %r' % control)
         control._map = self
-        self.controls = tuple([c for c in self.controls] + [control])
+        self.controls = tuple(list(self.controls) + [control])
         control.visible = True
 
     def remove_control(self, control):
         if control.model_id not in self.control_ids:
             raise ControlException('control not on map: %r' % control)
-        self.controls = tuple([c for c in self.controls if c.model_id != control.model_id])
+        self.controls = tuple(
+            c for c in self.controls if c.model_id != control.model_id
+        )
         control.visible = False
 
     def clear_controls(self):

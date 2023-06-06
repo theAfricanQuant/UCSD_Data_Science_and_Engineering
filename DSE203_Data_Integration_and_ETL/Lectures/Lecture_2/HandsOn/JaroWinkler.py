@@ -63,11 +63,7 @@ def _get_diff_index(first, second):
         return 0
 
     max_len = min(len(first), len(second))
-    for i in range(0, max_len):
-        if not first[i] == second[i]:
-            return i
-
-    return max_len
+    return next((i for i in range(0, max_len) if first[i] != second[i]), max_len)
 
 
 def _get_prefix(first, second):
@@ -82,7 +78,7 @@ def _get_prefix(first, second):
         return ""
 
     else:
-        return first[0:index]
+        return first[:index]
 
 
 def _get_matching_characters(first, second):
@@ -93,13 +89,13 @@ def _get_matching_characters(first, second):
         left, right = int(max(0, i - limit)), int(min(i + limit + 1, len(second)))
         if l in second[left:right]:
             common.append(l)
-            second = second[0:second.index(l)] + '*' + second[second.index(l) + 1:]
+            second = f'{second[:second.index(l)]}*{second[second.index(l) + 1:]}'
 
     return ''.join(common)
 
 
 def _transpositions(first, second):
-    return math.floor(len([(f, s) for f, s in zip(first, second) if not f == s]) / 2.0)
+    return math.floor(len([(f, s) for f, s in zip(first, second) if f != s]) / 2.0)
 
 
 class JaroDistanceException(Exception):

@@ -77,7 +77,7 @@ def create_score_matrix(rows, cols):
     of different base pairs. The path with the highest cummulative score is the
     best alignment.
     '''
-    score_matrix = [[0 for col in range(cols)] for row in range(rows)]
+    score_matrix = [[0 for _ in range(cols)] for _ in range(rows)]
 
     # Fill the scoring matrix.
     max_score = 0

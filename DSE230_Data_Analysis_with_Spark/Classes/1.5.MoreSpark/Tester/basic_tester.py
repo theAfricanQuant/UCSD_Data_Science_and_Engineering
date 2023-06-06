@@ -1,12 +1,12 @@
 import pickle
 
 def function_string(inputs, func_name):
-    result = func_name + "("
+    result = f"{func_name}("
     for i in xrange(0,len(inputs)):
         input_string = ""
         if i != 0:
             input_string += ","
-        input_string += "input[" + str(i) + "]" 
+        input_string += f"input[{str(i)}]"
         result += input_string
     result += ")"
     return result
@@ -83,9 +83,8 @@ def TestNumber(sqlContext, input, func_student, corAns, corType, multiInputs=Fal
     return True
 
 def getPickledData(pickleFileName):
-    f = open( pickleFileName )
-    data = pickle.load(f)
-    f.close()
+    with open( pickleFileName ) as f:
+        data = pickle.load(f)
     return data
 
 def checkExerciseFromPickle(sql_context, pickleFile, func_student, TestFunction, exerciseNumber, multiInputs=False):

@@ -3,12 +3,11 @@ import pickle
 #      ***   WE MUST CHANGE VERY_CLOSE FUNCTION   ***
 def GenPickle(sc, func_teacher, inputs, filename, ex, isRDD=True,twoInputs=False ):
     try:
-        f = open(filename,'r')
-        toPickle = pickle.load(f)
-        f.close()
+        with open(filename,'r') as f:
+            toPickle = pickle.load(f)
     except:
         toPickle = {}
-    
+
     exData = []
     for input in inputs:
         if twoInputs:
@@ -21,18 +20,17 @@ def GenPickle(sc, func_teacher, inputs, filename, ex, isRDD=True,twoInputs=False
                       type(tmpAns) ]) 
         else:
             exData.append([ tmpAns, 
-                      type(tmpAns) ]) 
+                      type(tmpAns) ])
     toPickle[ex] = {'inputs': inputs, 'outputs':exData}
-    
-    f = open(filename,'w')
-    pickle.dump(toPickle,f)
-    f.close()
+
+    with open(filename,'w') as f:
+        pickle.dump(toPickle,f)
 
     
 def very_close(A,B,tol=0.000001):
     ''' Check that the two firs parameters are lists of equal length 
     and then check'''
-    if (not type(A)==list and type(B) ==list) or len(A)!=len(B):
+    if type(A) != list and type(B) == list or len(A) != len(B):
         return False
     for i in range(len(A)):
         a=A[i]; b=B[i]
@@ -137,9 +135,8 @@ def RddReduce(func):
     return lambda RDD: RDD.reduce(func)
 
 def getPickledData(pickleFileName):
-    f = open( pickleFileName )
-    data = pickle.load(f)
-    f.close()
+    with open( pickleFileName ) as f:
+        data = pickle.load(f)
     return data
 
 def checkExercise(inputs, outputs, func_student, TestFunction, exerciseNumber, sc, twoInputs=False):

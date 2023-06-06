@@ -24,7 +24,9 @@ inputRDD=sc.textFile(path)
 # In[11]:
 
 # Transform the text RDD into an RDD of LabeledPoints
-Data=inputRDD.map(lambda line: [float(strip(x)) for x in line.split(',')])        .map(lambda a: LabeledPoint(a[-1], a[0:-1]))    
+Data = inputRDD.map(
+    lambda line: [float(strip(x)) for x in line.split(',')]
+).map(lambda a: LabeledPoint(a[-1], a[:-1]))    
 
 # ### Making the problem binary
 # 
@@ -34,10 +36,7 @@ Data=inputRDD.map(lambda line: [float(strip(x)) for x in line.split(',')])      
 # In[20]:
 
 def counter(val): 
-    if val == 2.0:
-        return 1.0
-    else: 
-        return 0.0
+    return 1.0 if val == 2.0 else 0.0
 
 # In[21]:
 

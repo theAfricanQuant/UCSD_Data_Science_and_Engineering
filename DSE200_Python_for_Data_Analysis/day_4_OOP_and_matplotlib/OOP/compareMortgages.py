@@ -31,15 +31,14 @@ class Mortgage(object):
 class Fixed(Mortgage):
     def __init__(self, loan, r, months):
         Mortgage.__init__(self, loan, r, months)
-        self.legend = 'Fixed, ' + str(r*100) + '%'
+        self.legend = f'Fixed, {str(r * 100)}%'
         
 class FixedWithPts(Mortgage):
     def __init__(self, loan, r, months, pts):
         Mortgage.__init__(self, loan, r, months)
         self.pts = pts
         self.paid = [loan*(pts/100.0)]
-        self.legend = 'Fixed, ' + str(r*100) + '%, '\
-                      + str(pts) + ' points'
+        self.legend = f'Fixed, {str(r * 100)}%, {str(pts)} points'
 
 #Page 111, Figure 8.10
 class TwoRate(Mortgage):

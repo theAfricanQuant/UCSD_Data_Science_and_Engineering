@@ -12,8 +12,8 @@ def make_figure(DataSets,names,Title='no title',size=(8,6)):
     figure(figsize=size)
     for i in range(len(DataSets)):
         keys,train,test = extract_errors(DataSets[i])
-        plot(keys,train,label='train-'+names[i])
-        plot(keys,test,label='test-'+names[i])
+        plot(keys, train, label=f'train-{names[i]}')
+        plot(keys, test, label=f'test-{names[i]}')
     title(Title)
     grid()
     legend()

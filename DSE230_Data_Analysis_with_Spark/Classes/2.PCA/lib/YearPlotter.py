@@ -14,7 +14,9 @@ class YearPlotter:
         #self.i+=1
         shp=shape(T)
         if shp[0] != 365:
-            raise ValueError("First dimension of T should be 365. Shape(T)="+str(shape(T)))
+            raise ValueError(
+                f"First dimension of T should be 365. Shape(T)={str(shape(T))}"
+            )
         if len(shp)==1:
             #print 'one'
             ax.plot(self.dates,T,label=label);
@@ -26,11 +28,11 @@ class YearPlotter:
                 ax.plot(self.dates,T[:,i],label=labels[i])
         ax.xaxis.set_major_locator(self.months)
         ax.xaxis.set_major_formatter(self.monthsFmt)
-        if not title is None:
+        if title is not None:
             ax.set_title(title)
-        if not xlabel is None:
+        if xlabel is not None:
             ax.set_xlabel(xlabel)
-        if not ylabel is None:
+        if ylabel is not None:
             ax.set_ylabel(ylabel)
         #rotate and align the tick labels so they look better
         fig.autofmt_xdate()

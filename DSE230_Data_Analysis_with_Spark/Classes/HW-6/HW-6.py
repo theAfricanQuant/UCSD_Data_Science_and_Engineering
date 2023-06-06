@@ -360,8 +360,10 @@ regex_strings = (
 
 ######################################################################
 # This is the core tokenizing regex:
-    
-word_re = re.compile(r"""(%s)""" % "|".join(regex_strings), re.VERBOSE | re.I | re.UNICODE)
+
+word_re = re.compile(
+    f"""({"|".join(regex_strings)})""", re.VERBOSE | re.I | re.UNICODE
+)
 
 # The emoticon string gets its own regex so that we can preserve case for them as needed:
 emoticon_re = re.compile(regex_strings[1], re.VERBOSE | re.I | re.UNICODE)
@@ -423,7 +425,7 @@ class Tokenizer:
         """
         # First the digits:
         ents = set(html_entity_digit_re.findall(s))
-        if len(ents) > 0:
+        if ents:
             for ent in ents:
                 entnum = ent[2:-1]
                 try:

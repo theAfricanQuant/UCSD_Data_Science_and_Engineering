@@ -28,7 +28,7 @@ class Eigen_decomp:
         self.startup_flag=True
         self.C=np.dot(self.U,np.nan_to_num(f)-mean)  # computer the eigen-vectors coefficients.
         self.n,self.m=np.shape(self.U)
-        self.coeff={'c'+str(i):self.C[i] for i in range(len(self.C))} # Put the coefficient in the dictionary format that is used by "interactive".
+        self.coeff = {f'c{str(i)}': self.C[i] for i in range(len(self.C))}
         return None
 
     def compute_var_explained(self):
@@ -47,14 +47,14 @@ class Eigen_decomp:
         def compute_var(vector):
             v=np.array(np.nan_to_num(vector),dtype=np.float64)
             return np.dot(v,v) # /float(total_variance)
-        
+
         residual_var=np.zeros(self.n+1)
         residual=self.f
         total_energy=compute_var(residual)
         residual=residual-self.mean
         residual_var[0]=compute_var(residual)
         for i in range(self.n):
-            g=self.v[i]*self.coeff['c'+str(i)]
+            g = self.v[i] * self.coeff[f'c{str(i)}']
             residual=residual-g
             residual_var[i+1]=compute_var(residual)
         percent_explained=np.zeros(self.n+1)
